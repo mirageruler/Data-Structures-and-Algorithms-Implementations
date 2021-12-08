@@ -42,10 +42,29 @@ func (a *Array) get(index int) (interface{}, error) {
 	return nil, fmt.Errorf("invalid index")
 }
 
+func (a *Array) pop() (*Array, error) {
+	// Validate the `Array` caller
+	if a == nil || a.Data == nil {
+		return a, nil
+	}
+
+	// Handle popping
+	delete(a.Data, a.Length-1)
+	a.Length--
+
+	bt, err := json.Marshal(a)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Printf("Array after being pop is %v\n", string(bt))
+
+	return a, nil
+}
+
 // push does push the specified element into the `Array` caller at the new last index.
 func (a *Array) push(item interface{}) (*Array, error) {
 	// Validate the `Array` caller
-	if a == nil || a.Data == nil {
+	if a == nil {
 		return a, nil
 	}
 
@@ -62,7 +81,6 @@ func (a *Array) push(item interface{}) (*Array, error) {
 	if err != nil {
 		return nil, err
 	}
-
 	fmt.Printf("Array after push %v is %v\n", item, string(bt))
 
 	return a, nil
@@ -80,8 +98,9 @@ func (a *Array) delete(index int) (*Array, error) {
 		// Case valid/exists, handle delete the specified element
 		a.shiftItems(index)
 		delete(a.Data, a.Length-1)
+		a.Length--
 
-		bt, err := json.Marshal(a.Data)
+		bt, err := json.Marshal(a)
 		if err != nil {
 			return nil, fmt.Errorf("failed to marshal data at index of %v", index)
 		}
@@ -109,6 +128,7 @@ func (a *Array) shiftItems(index int) int {
 
 func main() {
 	fmt.Println("Hello, this is ARRAYS playground!")
+	fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------")
 
 	myArray := Array{}
 
@@ -119,6 +139,7 @@ func main() {
 	myArray.push(10)
 
 	myArray.delete(2)
+	myArray.pop()
 
 	myArray.get(3)
 }
