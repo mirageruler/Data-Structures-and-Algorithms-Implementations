@@ -1,2 +1,2 @@
 # Data-Structures-and-Algorithms-Implementations
-Basic data structures and algorithms implemented from scratch using Golang
+Basic data structures and algorithms implementations from scratch using Golang
