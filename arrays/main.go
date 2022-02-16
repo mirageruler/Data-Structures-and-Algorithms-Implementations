@@ -2,8 +2,6 @@ package main
 
 import (
 	"fmt"
-
-	"encoding/json"
 )
 
 // Array type define a value of type `Array`, each elements can be value of arbitrary types
@@ -24,17 +22,11 @@ func (a *Array) checkValidIndex(index int) bool {
 func (a *Array) Get(index int) (interface{}, error) {
 	// Validate the `Array` caller
 	if a == nil || a.Data == nil {
-		return a, nil
+		return a, fmt.Errorf("invalid array")
 	}
 
 	// Check if the specified index is valid/exists
 	if a.checkValidIndex(index) {
-		// Case valid/exists, print and return the element at the specified index of the `Array` caller
-		bs, err := json.Marshal(a.Data[index])
-		if err != nil {
-			return nil, err
-		}
-		fmt.Printf("Array at index %v has the value of %v\n", index, string(bs))
 		return a.Data[index], nil
 	}
 
@@ -53,15 +45,6 @@ func (a *Array) Pop() error {
 	{
 		delete(a.Data, a.Length-1)
 		a.Length--
-	}
-
-	// Printing
-	{
-		bs, err := json.Marshal(a)
-		if err != nil {
-			return err
-		}
-		fmt.Printf("Array after being popped is %v\n", string(bs))
 	}
 
 	return nil
@@ -83,15 +66,6 @@ func (a *Array) Push(item interface{}) error {
 	a.Data[a.Length] = item
 	a.Length++
 
-	// Printing
-	{
-		bs, err := json.Marshal(a)
-		if err != nil {
-			return err
-		}
-		fmt.Printf("Array after being pushed `%v` is %v\n", item, string(bs))
-	}
-
 	return nil
 }
 
@@ -104,30 +78,16 @@ func (a *Array) Delete(index int) error {
 	// Check if the specified index is valid/exists
 	if a.checkValidIndex(index) {
 		// Case valid/exists, handle deleting the specified element
-		{
-			err := a.shiftItems(index, "left")
-			if err != nil {
-				return fmt.Errorf("Delete failed shiftItems")
-			}
+		a.shiftItems(index, "left")
 
-			delete(a.Data, a.Length-1)
-			a.Length--
-		}
-
-		// Printing
-		{
-			bs, err := json.Marshal(a)
-			if err != nil {
-				return fmt.Errorf("failed to marshal data at index %v", index)
-			}
-			fmt.Printf("Array after deleting item at index %v is %v\n", index, string(bs))
-		}
+		delete(a.Data, a.Length-1)
+		a.Length--
 
 		return nil
+
 	}
 
 	// Case invalid/not-exists, print and return the error
-	fmt.Printf("This array doesn't have item at index %v\n", index)
 	return fmt.Errorf("invalid index")
 }
 
@@ -138,40 +98,25 @@ func (a *Array) Insert(item interface{}, index int) error {
 	}
 
 	// If the `Array` caller is empty/nil then initialize one.
-	if a.Data == nil {
-		a.Data = map[int]interface{}{}
+	if a.Data == nil || a.Length == 0 {
+		return a.Push(item)
 	}
 
 	// Handle inserting
-	{
+	if a.checkValidIndex(index) {
 		a.Length++
 
-		err := a.shiftItems(index, "right")
-		if err != nil {
-			return fmt.Errorf("Insert failed shiftItems")
-		}
+		a.shiftItems(index, "right")
 		a.Data[index] = item
+
+		return nil
 	}
 
-	// Printing
-	{
-		bs, err := json.Marshal(a)
-		if err != nil {
-			return err
-		}
-		fmt.Printf("Array after inserting item `%v` at index %v is: %v\n", item, index, string(bs))
-	}
-
-	return nil
-
+	return fmt.Errorf("invalid index")
 }
 
 // shiftItems does shift elements to the previous index, from the specified index to the last index (BUT not including) of the `Array` caller.
-func (a *Array) shiftItems(index int, direction string) error {
-	if a == nil {
-		return fmt.Errorf("invalid index")
-	}
-
+func (a *Array) shiftItems(index int, direction string) {
 	if direction == "left" {
 		for i := index; i < a.Length-1; i++ {
 			a.Data[i] = a.Data[i+1]
@@ -181,26 +126,4 @@ func (a *Array) shiftItems(index int, direction string) error {
 			a.Data[i] = a.Data[i-1]
 		}
 	}
-
-	return nil
-}
-
-func main() {
-	fmt.Println("Hello, this is ARRAYS playground!")
-	fmt.Println("-------------------------------------------------------------------------------------------------------------------------------------------------------------------")
-
-	myArray := Array{}
-
-	myArray.Push(1)
-	myArray.Push("5")
-	myArray.Push([]string{"john", "mike", "shawn"})
-	myArray.Push(map[string]interface{}{"key1": 22})
-	myArray.Push(10)
-
-	myArray.Insert("INSERT", 2)
-
-	myArray.Delete(2)
-	myArray.Pop()
-
-	myArray.Get(3)
 }
