@@ -1,4 +1,4 @@
-package main
+package array
 
 import (
 	"fmt"
@@ -126,4 +126,5 @@ func (a *Array) shiftItems(index int, direction string) {
 			a.Data[i] = a.Data[i-1]
 		}
 	}
+
 }
