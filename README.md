@@ -1,2 +1,2 @@
-# Data Structures & Algorithms Implementations With Go
-Basic data structures and algorithms implementations with UT from scratch using Go.
+# Data Structures & Algorithms Implementations With Idiomatic Go
+Basic data structures and algorithms implementations & UT with idiomatic Go.
