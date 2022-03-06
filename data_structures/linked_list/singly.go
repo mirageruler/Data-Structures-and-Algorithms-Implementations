@@ -81,7 +81,7 @@ func (l *Singly) Count() int {
 	return l.length
 }
 
-// Display prints to stdout the elements of the list.
+// Display prints to io.writer the elements of the list.
 func (l *Singly) Display(r io.Writer) (int, error) {
 	var bw int
 	for cur := l.Head; cur != nil; cur = cur.Next {
@@ -136,6 +136,7 @@ func (l *Singly) ReverseSublist(left, right int) error {
 		return err
 	}
 
+	// Use this approach because it will perfectly solve the case left = 1
 	tmpNode := NewNode(-1)
 	tmpNode.Next = l.Head
 	pre := tmpNode

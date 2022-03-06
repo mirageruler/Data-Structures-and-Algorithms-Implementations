@@ -1,23 +1,22 @@
 package linkedlist
 
 import (
-	"bytes"
 	"errors"
 	"testing"
 
 	"github.com/stretchr/testify/require"
 )
 
-func Test_AddAtBeg_Singly(t *testing.T) {
+func Test_AddAtBeg_Doubly(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(l *Singly) *Singly
+		manipulate func(l *Doubly) *Doubly
 		want       []interface{}
 	}{
 		{
 			name: "Case add 2 elems at the beginning successfully",
-			manipulate: func(l *Singly) *Singly {
+			manipulate: func(l *Doubly) *Doubly {
 				l.AddAtBeg(1)
 				l.AddAtBeg(2)
 				return l
@@ -28,7 +27,7 @@ func Test_AddAtBeg_Singly(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			list := NewSingly()
+			list := NewDoubly()
 			list = c.manipulate(list)
 			got := []interface{}{}
 			current := list.Head
@@ -42,16 +41,16 @@ func Test_AddAtBeg_Singly(t *testing.T) {
 	}
 }
 
-func Test_AddAtEnd_Singly(t *testing.T) {
+func Test_AddAtEnd_Doubly(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(l *Singly) *Singly
+		manipulate func(l *Doubly) *Doubly
 		want       []interface{}
 	}{
 		{
 			name: "Case add 2 elems at the end successfully",
-			manipulate: func(l *Singly) *Singly {
+			manipulate: func(l *Doubly) *Doubly {
 				l.AddAtEnd(1)
 				l.AddAtEnd(2)
 				l.AddAtEnd(3)
@@ -63,7 +62,7 @@ func Test_AddAtEnd_Singly(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			list := NewSingly()
+			list := NewDoubly()
 			list = c.manipulate(list)
 			got := []interface{}{}
 			current := list.Head
@@ -77,16 +76,16 @@ func Test_AddAtEnd_Singly(t *testing.T) {
 	}
 }
 
-func Test_DelAtBeg_Singly(t *testing.T) {
+func Test_DelAtBeg_Doubly(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(l *Singly) interface{}
+		manipulate func(l *Doubly) interface{}
 		want       interface{}
 	}{
 		{
 			name: "Case del the first elem successfully",
-			manipulate: func(l *Singly) interface{} {
+			manipulate: func(l *Doubly) interface{} {
 				l.DelAtBeg()
 				return l
 			},
@@ -94,7 +93,7 @@ func Test_DelAtBeg_Singly(t *testing.T) {
 		},
 		{
 			name: "Case return -1 due to nil list",
-			manipulate: func(l *Singly) interface{} {
+			manipulate: func(l *Doubly) interface{} {
 				l.Head = nil
 				return l.DelAtBeg()
 			},
@@ -104,13 +103,13 @@ func Test_DelAtBeg_Singly(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			list := NewSingly()
+			list := NewDoubly()
 			list.AddAtEnd(1)
 			list.AddAtEnd(2)
 			list.AddAtEnd(3)
 			result := c.manipulate(list)
 			switch result.(type) {
-			case *Singly:
+			case *Doubly:
 				got := []interface{}{}
 				current := list.Head
 				for current != nil {
@@ -127,24 +126,26 @@ func Test_DelAtBeg_Singly(t *testing.T) {
 	}
 }
 
-func Test_DelAtEnd_Singly(t *testing.T) {
+func Test_DelAtEnd_Doubly(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(l *Singly) interface{}
+		manipulate func(l *Doubly) interface{}
 		want       interface{}
 	}{
 		{
 			name: "Case del the last elem successfully",
-			manipulate: func(l *Singly) interface{} {
+			manipulate: func(l *Doubly) interface{} {
+				l.DelAtEnd()
+				l.DelAtEnd()
 				l.DelAtEnd()
 				return l
 			},
-			want: []interface{}{1, 2},
+			want: []interface{}{},
 		},
 		{
 			name: "Case return -1 due to nil list",
-			manipulate: func(l *Singly) interface{} {
+			manipulate: func(l *Doubly) interface{} {
 				l.Head = nil
 				return l.DelAtEnd()
 			},
@@ -154,13 +155,13 @@ func Test_DelAtEnd_Singly(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			list := NewSingly()
+			list := NewDoubly()
 			list.AddAtEnd(1)
 			list.AddAtEnd(2)
 			list.AddAtEnd(3)
 			result := c.manipulate(list)
 			switch result.(type) {
-			case *Singly:
+			case *Doubly:
 				got := []interface{}{}
 				current := list.Head
 				for current != nil {
@@ -177,32 +178,16 @@ func Test_DelAtEnd_Singly(t *testing.T) {
 	}
 }
 
-func Test_Display_Singly(t *testing.T) {
-	t.Parallel()
-	list := NewSingly()
-	list.AddAtEnd(1)
-	list.AddAtEnd(2)
-	list.AddAtEnd(3)
-
-	buffer := bytes.Buffer{}
-
-	_, err := list.Display(&buffer)
-	got := buffer.String()
-	want := "1 -> 2 -> 3"
-	require.Nil(t, err)
-	require.Equal(t, got, want)
-}
-
-func Test_Reverse_Singly(t *testing.T) {
+func Test_Reverse_Doubly(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(l *Singly) *Singly
+		manipulate func(l *Doubly) *Doubly
 		want       []interface{}
 	}{
 		{
 			name: "Case reverse successfully",
-			manipulate: func(l *Singly) *Singly {
+			manipulate: func(l *Doubly) *Doubly {
 				l.Reverse()
 				return l
 			},
@@ -212,7 +197,7 @@ func Test_Reverse_Singly(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			list := NewSingly()
+			list := NewDoubly()
 			list.AddAtEnd(1)
 			list.AddAtEnd(5)
 			list.AddAtEnd(3)
@@ -231,16 +216,16 @@ func Test_Reverse_Singly(t *testing.T) {
 	}
 }
 
-func Test_ReverseSubList_Singly(t *testing.T) {
+func Test_ReverseSubList_Doubly(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(l *Singly) interface{}
+		manipulate func(l *Doubly) interface{}
 		want       interface{}
 	}{
 		{
 			name: "Case reverse successfully",
-			manipulate: func(l *Singly) interface{} {
+			manipulate: func(l *Doubly) interface{} {
 				l.ReverseSublist(2, 5)
 				return l
 			},
@@ -248,21 +233,21 @@ func Test_ReverseSubList_Singly(t *testing.T) {
 		},
 		{
 			name: "Case reverse fail due to left > right",
-			manipulate: func(l *Singly) interface{} {
+			manipulate: func(l *Doubly) interface{} {
 				return l.ReverseSublist(5, 2)
 			},
 			want: errors.New("left boundary must smaller than right"),
 		},
 		{
 			name: "Case reverse fail due to left < 0",
-			manipulate: func(l *Singly) interface{} {
+			manipulate: func(l *Doubly) interface{} {
 				return l.ReverseSublist(-1, 5)
 			},
 			want: errors.New("left boundary starts from the first node"),
 		},
 		{
 			name: "Case reverse fail due to right > list.length",
-			manipulate: func(l *Singly) interface{} {
+			manipulate: func(l *Doubly) interface{} {
 				return l.ReverseSublist(3, 9)
 			},
 			want: errors.New("right boundary cannot be greater than the length of the linked list"),
@@ -271,7 +256,7 @@ func Test_ReverseSubList_Singly(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			list := NewSingly()
+			list := NewDoubly()
 			list.AddAtEnd(1)
 			list.AddAtEnd(5)
 			list.AddAtEnd(3)
@@ -281,7 +266,7 @@ func Test_ReverseSubList_Singly(t *testing.T) {
 			list.AddAtEnd(6)
 			result := c.manipulate(list)
 			switch result.(type) {
-			case *Singly:
+			case *Doubly:
 				got := []interface{}{}
 				current := list.Head
 				for current != nil {
