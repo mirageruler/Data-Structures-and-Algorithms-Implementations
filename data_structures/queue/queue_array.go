@@ -36,13 +36,22 @@ func (q *QueueArray) Dequeue() interface{} {
 	return retVal
 }
 
-// Peak returns the first element of the queue, -1 is returned if that queue is empty or invalid.
-func (q *QueueArray) Peak() interface{} {
+// FrontQueue returns the first(oldest) element of the queue, -1 is returned if that queue is empty or invalid.
+func (q *QueueArray) FrontQueue() interface{} {
 	if q == nil || len(q.Data) == 0 {
 		return -1
 	}
 
 	return q.Data[0]
+}
+
+// BackQueue returns the last(newest) element of the queue, -1 is returned if that queue is empty or invalid.
+func (q *QueueArray) BackQueue() interface{} {
+	if q == nil || len(q.Data) == 0 {
+		return -1
+	}
+
+	return q.Data[len(q.Data)-1]
 }
 
 // IsEmpty tells whether the queue is empty or not, -1 is returned if that queue is invalid.

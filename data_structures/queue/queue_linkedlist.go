@@ -61,7 +61,7 @@ func (q *QueueLinkedList) Dequeue() interface{} {
 	return retVal
 }
 
-// Peak returns the first element of the queue, -1 is returned if that queue is empty or invalid.
+// Peak returns the first element(oldest) of the queue, -1 is returned if that queue is empty or invalid.
 func (q *QueueLinkedList) Peak() interface{} {
 	if q == nil || q.Head == nil {
 		return -1

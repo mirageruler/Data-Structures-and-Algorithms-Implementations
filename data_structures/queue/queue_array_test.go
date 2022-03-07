@@ -74,7 +74,7 @@ func TestDequeue_QueueArray(t *testing.T) {
 	}
 }
 
-func TestPeak_QueueArray(t *testing.T) {
+func TestFrontQueue_QueueArray(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
@@ -84,18 +84,54 @@ func TestPeak_QueueArray(t *testing.T) {
 		{
 			name: "Case return -1 due to empty queue",
 			manipulate: func(q *QueueArray) interface{} {
-				return q.Peak()
+				return q.FrontQueue()
 			},
 			want: -1,
 		},
 		{
-			name: "Case success and return the first element of the queue",
+			name: "Case success and return the first(oldest) element of the queue",
 			manipulate: func(q *QueueArray) interface{} {
 				q.Enqueue(5)
 				q.Enqueue(10)
-				return q.Peak()
+				return q.FrontQueue()
 			},
 			want: 5,
+		},
+	}
+
+	for _, c := range cases {
+		t.Run(c.name, func(t *testing.T) {
+			q := NewQueueArray()
+			got := c.manipulate(q)
+			if got != c.want {
+				t.Errorf("got: %#v, want: %#v", got, c.want)
+			}
+		})
+	}
+}
+
+func TestBackQueue_QueueArray(t *testing.T) {
+	t.Parallel()
+	cases := []struct {
+		name       string
+		manipulate func(*QueueArray) interface{}
+		want       interface{}
+	}{
+		{
+			name: "Case return -1 due to empty queue",
+			manipulate: func(q *QueueArray) interface{} {
+				return q.BackQueue()
+			},
+			want: -1,
+		},
+		{
+			name: "Case success and return the last(newest) element of the queue",
+			manipulate: func(q *QueueArray) interface{} {
+				q.Enqueue(5)
+				q.Enqueue(10)
+				return q.BackQueue()
+			},
+			want: 10,
 		},
 	}
 
