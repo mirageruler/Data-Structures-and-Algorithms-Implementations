@@ -6,12 +6,13 @@ func TestPush_StackLinkedList(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(s *StackLinkedList, val interface{}) interface{}
+		manipulate func(*StackLinkedList, interface{}) interface{}
 		want       interface{}
 	}{
 		{
 			name: "Case return -1 due to nil stack",
 			manipulate: func(s *StackLinkedList, v interface{}) interface{} {
+				s.Push(v)
 				s = nil // make the stack nil
 				return s.Push(v)
 			},
@@ -49,13 +50,12 @@ func TestPop_StackLinkedList(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(s *StackLinkedList) interface{}
+		manipulate func(*StackLinkedList) interface{}
 		want       interface{}
 	}{
 		{
-			name: "Case return -1 due to nil stack",
+			name: "Case return -1 due to empty stack",
 			manipulate: func(s *StackLinkedList) interface{} {
-				s = nil // make the stack nil
 				return s.Pop()
 			},
 			want: -1,
@@ -94,19 +94,18 @@ func TestPeak_StackLinkedList(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(s *StackLinkedList) interface{}
+		manipulate func(*StackLinkedList) interface{}
 		want       interface{}
 	}{
 		{
-			name: "Case return -1 due to nil stack",
+			name: "Case return -1 due to empty stack",
 			manipulate: func(s *StackLinkedList) interface{} {
-				s = nil // make the stack nil
 				return s.Peak()
 			},
 			want: -1,
 		},
 		{
-			name: "Case success and return the pushed value",
+			name: "Case success and return the top most elem",
 			manipulate: func(s *StackLinkedList) interface{} {
 				s.Push(5)
 				s.Push(10)
@@ -131,12 +130,13 @@ func TestIsEmpty_StackLinkedList(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(s *StackLinkedList) interface{}
+		manipulate func(*StackLinkedList) interface{}
 		want       interface{}
 	}{
 		{
 			name: "Case return true due to nil stack",
 			manipulate: func(s *StackLinkedList) interface{} {
+				s.Push(8)
 				s = nil // make the stack nil
 				return s.IsEmpty()
 			},

@@ -6,12 +6,13 @@ func TestPush_StackArray(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(s *StackArray, val interface{}) interface{}
+		manipulate func(*StackArray, interface{}) interface{}
 		want       interface{}
 	}{
 		{
 			name: "Case return -1 due to nil stack",
 			manipulate: func(s *StackArray, v interface{}) interface{} {
+				s.Push(v)
 				s = nil // make the stack nil
 				return s.Push(v)
 			},
@@ -41,13 +42,12 @@ func TestPop_StackArray(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(s *StackArray) interface{}
+		manipulate func(*StackArray) interface{}
 		want       interface{}
 	}{
 		{
-			name: "Case return -1 due to nil stack",
+			name: "Case return -1 due to empty stack",
 			manipulate: func(s *StackArray) interface{} {
-				s = nil // make the stack nil
 				return s.Pop()
 			},
 			want: -1,
@@ -78,19 +78,18 @@ func TestPeak_StackArray(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(s *StackArray) interface{}
+		manipulate func(*StackArray) interface{}
 		want       interface{}
 	}{
 		{
-			name: "Case return -1 due to nil stack",
+			name: "Case return -1 due to empty stack",
 			manipulate: func(s *StackArray) interface{} {
-				s = nil // make the stack nil
 				return s.Peak()
 			},
 			want: -1,
 		},
 		{
-			name: "Case success and return the pushed value",
+			name: "Case success and return the top most value of the stack",
 			manipulate: func(s *StackArray) interface{} {
 				s.Push(5)
 				s.Push(10)
@@ -115,7 +114,7 @@ func TestIsEmpty_StackArray(t *testing.T) {
 	t.Parallel()
 	cases := []struct {
 		name       string
-		manipulate func(s *StackArray) interface{}
+		manipulate func(*StackArray) interface{}
 		want       interface{}
 	}{
 		{
