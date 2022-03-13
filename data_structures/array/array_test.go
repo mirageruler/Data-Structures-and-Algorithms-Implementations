@@ -85,6 +85,7 @@ func Test_Get(t *testing.T) {
 		{
 			name: "case3: fail to get due to nil array",
 			manipulate: func(a *Array) *Array {
+				a.Push(2)
 				a = nil
 
 				return a
@@ -135,6 +136,7 @@ func Test_Push(t *testing.T) {
 		{
 			name: "case2: fail to push due to nil array",
 			manipulate: func(a *Array) *Array {
+				a.Push(2)
 				a = nil
 				return a
 			},
@@ -185,6 +187,7 @@ func Test_Pop(t *testing.T) {
 		{
 			name: "case2: fail to pop due to nil array",
 			manipulate: func(a *Array) *Array {
+				a.Push(2)
 				a = nil
 				return a
 			},
@@ -254,6 +257,7 @@ func Test_Delete(t *testing.T) {
 		{
 			name: "case2: fail to insert due to nil array",
 			manipulate: func(a *Array) *Array {
+				a.Push(2)
 				a = nil
 				return a
 			},
@@ -372,6 +376,7 @@ func Test_Insert(t *testing.T) {
 		{
 			name: "case3: fail to insert due to nil array",
 			manipulate: func(a *Array) *Array {
+				a.Push(2)
 				a = nil
 				return a
 			},

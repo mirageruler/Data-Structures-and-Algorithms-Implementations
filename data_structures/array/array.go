@@ -4,10 +4,13 @@ import (
 	"fmt"
 )
 
-// Array type define a value of type `Array`, each elements can be value of arbitrary types
+// Array defines an array built from Golang map
 type Array struct {
+	// Length is the length of the array
 	Length int
-	Data   map[int]interface{}
+	// Data is the map that represents the array with index and value as key-value pair
+	// Key can only be int and value can be any arbitrary type
+	Data map[int]interface{}
 }
 
 // checkValidIndex does check if the `Array` caller has any value with the given key(index).
