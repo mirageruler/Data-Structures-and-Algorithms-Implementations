@@ -1,5 +1,7 @@
 package tree
 
+import "math"
+
 // BST defines a binary search tree structure
 type BST struct {
 	Root *Node
@@ -45,6 +47,25 @@ func (t *BST) Insert(val int) interface{} {
 		}
 	}
 
+}
+
+func (t *BST) LookUp(val int) interface{} {
+	if t.Root == nil {
+		return false
+	}
+
+	cur := t.Root
+	for cur != nil {
+		if val < cur.Val {
+			cur = cur.Left
+		} else if val > cur.Val {
+			cur = cur.Right
+		} else if val == cur.Val {
+			return cur.Val
+		}
+	}
+
+	return -1
 }
 
 /*
@@ -101,4 +122,131 @@ func BFS_Recursive(queue []*Node, list []int) interface{} {
 func (t *BST) DFS() interface{} {
 
 	return nil
+}
+
+func DFSInOrder(root *Node) *[]int {
+	return traverseInOrder(root, &[]int{})
+}
+
+func DFSPreOrder(root *Node) *[]int {
+	return traversePreOrder(root, &[]int{})
+}
+
+func DFSPostOrder(root *Node) *[]int {
+	return traversePostOrder(root, &[]int{})
+}
+
+func traverseInOrder(cur *Node, result *[]int) *[]int {
+	if cur.Left != nil {
+		traverseInOrder(cur.Left, result)
+	}
+
+	*result = append(*result, cur.Val)
+	if cur.Right != nil {
+		traverseInOrder(cur.Right, result)
+	}
+	return result
+}
+
+func traversePreOrder(cur *Node, result *[]int) *[]int {
+	*result = append(*result, cur.Val)
+	if cur.Left != nil {
+		traversePreOrder(cur.Left, result)
+	}
+
+	if cur.Right != nil {
+		traversePreOrder(cur.Right, result)
+	}
+	return result
+
+}
+
+func traversePostOrder(cur *Node, result *[]int) *[]int {
+	if cur.Left != nil {
+		traversePostOrder(cur.Left, result)
+	}
+
+	if cur.Right != nil {
+		traversePostOrder(cur.Right, result)
+	}
+	*result = append(*result, cur.Val)
+	return result
+}
+
+// func AverageOfSubArrayOfSizeK(a []int, k int) []float64 {
+// 	l := len(a)
+
+// 	result := make([]float64, l-k+1)
+
+// 	for i := 0; i < l-k+1; i++ {
+// 		sum := 0
+// 		for j := i; j < i+k; j++ {
+// 			sum += a[j]
+// 		}
+// 		result[i] = float64(sum) / float64(k)
+// 	}
+
+// 	return result
+// }
+
+func AverageOfSubArrayOfSizeK(a []int, k int) []float64 {
+	l := len(a)
+	result := make([]float64, l-k+1)
+	windowStart := 0
+	windowSum := 0
+
+	for windowEnd := 0; windowEnd < k; windowEnd++ {
+		windowSum += a[windowEnd]
+	}
+
+	for windowEnd := k; windowEnd < l; windowEnd++ {
+		result[windowStart] = float64(windowSum) / float64(k)
+		windowSum += a[windowEnd]
+		windowSum -= a[windowStart]
+		windowStart++
+		result[windowStart] = float64(windowSum) / float64(k)
+	}
+
+	return result
+}
+
+// [4, 2, 1, 7, 8, 1, 2, 8, 1, 0]
+func MaxSumSubArray(a []int, k int) int {
+	currentRunningSum := 0
+	maxValue := 0
+
+	for i := 0; i < len(a); i++ {
+		currentRunningSum += a[i]
+		if i >= k-1 {
+			if maxValue < currentRunningSum {
+				maxValue = currentRunningSum
+			}
+			currentRunningSum -= a[i-(k-1)]
+		}
+	}
+
+	return maxValue
+}
+
+func SmallestSubarrayGivenSum(target int, input []int) int {
+	minWindowSize := math.Inf(1)
+	currentWindowSum := 0
+	windowStart := 0
+
+	for windowEnd := 0; windowEnd < len(input); windowEnd++ {
+		currentWindowSum += input[windowEnd]
+		for currentWindowSum >= target {
+			if minWindowSize > float64(windowEnd-windowStart+1) {
+				minWindowSize = float64(windowEnd - windowStart + 1)
+			}
+			currentWindowSum -= input[windowStart]
+			windowStart++
+		}
+	}
+
+	if minWindowSize == math.Inf(1) {
+		return -1
+	}
+
+	return int(minWindowSize)
 }
