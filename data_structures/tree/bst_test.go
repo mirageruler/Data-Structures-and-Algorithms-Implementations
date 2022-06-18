@@ -42,22 +42,4 @@ func TestInsert_BST(t *testing.T) {
 
 	dfsPreOrder := DFSPreOrder(bst.Root)
 	fmt.Println("DFS - PreOrder:", *dfsPreOrder)
-
-	t.Error()
-}
-
-func TestFoo(t *testing.T) {
-	input := []int{1, 3, 2, 6, -1, 4, 1, 8, 2}
-	out := AverageOfSubArrayOfSizeK(input, 5)
-
-	fmt.Println("OUT:", out)
-	t.Error()
-}
-
-func TestBar(t *testing.T) {
-	input := []int{4, 2, 2, 7, 8, 1, 2, 8, 10}
-	out := SmallestSubarrayGivenSum(18, input)
-
-	fmt.Println("OUT:", out)
-	t.Error()
 }
