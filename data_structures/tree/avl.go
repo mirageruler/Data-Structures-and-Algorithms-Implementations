@@ -456,6 +456,35 @@ func PrintTree(root *AVLNode, indent string, last bool) {
 	}
 }
 
+func (t AVLTree) MinNodesInCurrentHeight() int {
+	var (
+		res         int
+		minNumOnAVL func(height, a, b int) int
+	)
+
+	minNumOnAVL = func(height, a, b int) int {
+		// Base Conditions
+		if height == 0 {
+			return 1
+		}
+		if height == 1 {
+			return b
+		}
+
+		// Tail Recursive Call
+		return minNumOnAVL(height-1, b, a+b+1)
+	}
+	/*
+		 Explanation:
+		 - For height = 0, we can only have a single node in an AVL tree, i.e. n(0) = 1	(Our first base case)
+		 - For height = 1, we can have a minimum of two nodes in an AVL tree, i.e. n(1) = 2	(Our second base case)
+		 - Now for any height ‘h’, root will have two subtrees (left and right). Out of which one has to be of height h-1 and other of h-2. [root node excluded]
+		==> use the formula base on the recurrence relation `n(h) = 1 + n(h-1) + n(h-2)`
+	*/
+	minNumOnAVL(t.root.height, 1, 2)
+	return res
+}
+
 func main() {
 	// Creating AVL tree and
 	// inserting data in it
@@ -477,6 +506,6 @@ func main() {
 	fmt.Println("After deleting ")
 	PrintTree(avlTree.root, "", true)
 
-	out := avlTree.Find(9)
-	fmt.Println("FOUND:", out.key)
+	fmt.Printf("FIND %d\n", avlTree.Find(9).key)
+	fmt.Printf("Minimum number of nodes for height %d is %d \n", avlTree.root.height, avlTree.MinNodesInCurrentHeight())
 }
