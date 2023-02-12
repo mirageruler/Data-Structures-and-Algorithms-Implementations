@@ -460,7 +460,7 @@ func PrintTree(root *AVLNode, indent string, last bool) {
 	}
 }
 
-func (t AVLTree) MinNodesInCurrentHeight() int {
+func (t AVLTree) MinNodesWithCurrentHeight() int {
 	var (
 		res         int
 		minNumOnAVL func(height, a, b int) int
@@ -518,5 +518,5 @@ func main() {
 	PrintTree(avlTree.root, "", true)
 
 	fmt.Printf("FIND %d\n", avlTree.Find(9).key)
-	fmt.Printf("Minimum number of nodes for height %d is %d \n", avlTree.root.height, avlTree.MinNodesInCurrentHeight())
+	fmt.Printf("Minimum number of nodes for height %d is %d \n", avlTree.root.height, avlTree.MinNodesWithCurrentHeight())
 }
