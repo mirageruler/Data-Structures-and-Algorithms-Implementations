@@ -1,7 +1,5 @@
 package sorting
 
-import "fmt"
-
 func Merge(input []int) []int {
 	return mergeSort(input)
 }
@@ -20,8 +18,6 @@ func mergeSort(input []int) []int {
 
 func merge(left, right []int) []int {
 	result := []int{}
-	fmt.Println("left: ", left)
-	fmt.Println("right: ", right)
 	leftIdx, rightIdx := 0, 0
 	for leftIdx < len(left) && rightIdx < len(right) {
 		if left[leftIdx] < right[rightIdx] {
