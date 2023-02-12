@@ -12,10 +12,3 @@ type Node struct {
 func NewNode(val int) *Node {
 	return &Node{Val: val}
 }
-
-func max(a, b int) int {
-	if a > b {
-		return a
-	}
-	return b
-}

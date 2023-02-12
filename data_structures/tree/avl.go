@@ -79,8 +79,8 @@ func leftRotate(x *AVLNode) *AVLNode {
 	return y
 }
 
-// rotateForInsertion recursively perform necessary rotations to keep the current AVL Tree balance after an insertion.
-func (n *AVLNode) rotateForInsertion(key int) *AVLNode {
+// rebalanceTreeAfterInsertion recursively perform necessary rotations to keep the current AVL Tree balance after an insertion.
+func (n *AVLNode) rebalanceTreeAfterInsertion(key int) *AVLNode {
 	// after update the height of current node, get the current balance factor of the current node
 	balFtr := n.getBalanceFactor()
 
@@ -159,8 +159,8 @@ func (n *AVLNode) rotateForInsertion(key int) *AVLNode {
 	return n
 }
 
-// rotateForDeletion recursively perform necessary rotations to keep the current AVL Tree balance after a deletion.
-func (n *AVLNode) rotateForDeletion() *AVLNode {
+// rebalanceTreeAfterDeletion recursively perform necessary rotations to keep the current AVL Tree balance after a deletion.
+func (n *AVLNode) rebalanceTreeAfterDeletion() *AVLNode {
 	// after update the height of current node, get the current balance factor of the current node
 	balFtr := n.getBalanceFactor()
 
@@ -260,7 +260,7 @@ func (n *AVLNode) updateHeight() {
 }
 
 // FindMinimum will return a pointer to an AVLNode that has the lowest key traversed from the the input `n`
-func FindMinimum(n *AVLNode) *AVLNode {
+func findMin(n *AVLNode) *AVLNode {
 	if n == nil {
 		return n
 	}
@@ -269,6 +269,10 @@ func FindMinimum(n *AVLNode) *AVLNode {
 		cur = cur.left
 	}
 	return cur
+}
+
+func successor(n *AVLNode) *AVLNode {
+	return findMin(n.right)
 }
 
 // InsertNode insert a new AVLNode with given `key` into the current AVLTree structure and will try to maintain the "balance" property of the tree after that which may or may not change the tree structure
@@ -303,7 +307,7 @@ func insertNode(n *AVLNode, key int) *AVLNode {
 	// when going all the way up, we will need to re-calculate the height of each node by using this formula
 	n.updateHeight()
 
-	return n.rotateForInsertion(key)
+	return n.rebalanceTreeAfterInsertion(key)
 }
 
 // DeleteNode find and delete an AVLNode with the specified `key` from the current AVLTree structure and will try to maintain the "balance" property of the tree after that which may or may not change the tree structure
@@ -334,7 +338,7 @@ func deleteNode(n *AVLNode, key int) *AVLNode {
 			caseLeftOrRightChildIsEmpty(n)
 		} else { // if the node that is going to be deleted has both left and right child
 			// find the minimum node in the right sub-tree of this node
-			tmp := FindMinimum(n.right)
+			tmp := successor(n)
 			// replace the current node's key with the node we've found right above
 			n.key = tmp.key
 			// recursively delete that minimum node from the right sub-tree of the current node (because it is already placed at the current node by the logic of the line above)
@@ -350,7 +354,7 @@ func deleteNode(n *AVLNode, key int) *AVLNode {
 	// when going all the way up, we will need to re-calculate the height of each node by using this formula
 	n.updateHeight()
 
-	return n.rotateForDeletion()
+	return n.rebalanceTreeAfterDeletion()
 }
 
 // caseLeftOrRightChildIsEmpty handle deletion for a node in case it's left child or right child is empty or both of them are empty
@@ -483,6 +487,13 @@ func (t AVLTree) MinNodesInCurrentHeight() int {
 	*/
 	minNumOnAVL(t.root.height, 1, 2)
 	return res
+}
+
+func max(a, b int) int {
+	if a > b {
+		return a
+	}
+	return b
 }
 
 func main() {
